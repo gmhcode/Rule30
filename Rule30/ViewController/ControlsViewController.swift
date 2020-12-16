@@ -40,14 +40,9 @@ class ControlsViewController: UIViewController {
         }
     }
     @IBAction func stopStartTapped(_ sender: Any) {
-        
-        if startStopButton.titleLabel?.text == "Stop"{
+
             viewModel.startStopPyramid.send(true)
-            startStopButton.setTitle("Start", for: .normal)
-        }else {
-            viewModel.startStopPyramid.send(true)
-            startStopButton.setTitle("Stop", for: .normal)
-        }
+
     }
 
 }
