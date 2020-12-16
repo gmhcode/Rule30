@@ -10,23 +10,24 @@ import Combine
 class Rule30ViewModel {
     //when reloadData is set, the collectionView.reloadData will be called
     @Published var reloadData = true
+    ///When colorPickerTrigger.send() is called, UIColorPickViewController will be presented on the Rule30ViewController
+    var colorPickerTrigger = PassthroughSubject<ColorChange, Never>()
+    ///When startStopPyramid.send() is called, the pyramid will start/stop
+    var startStopPyramid = PassthroughSubject<Bool, Never>()
+    ///When colorPickerColor is set, colorPickerTrigger will be...triggered, which will call the UIColorPickViewController
+    var colorPickerColor : ColorChange = .primary {
+        didSet {
+            colorPickerTrigger.send(colorPickerColor)
+        }
+    }
     var cellSize: CGFloat = 0
     var cellCount: Int = 0
     var cellsPerRow: Int = 1
     var collectionViewWidth : CGFloat = 350.0
     var primaryColor : UIColor = .black
     var secondaryColor : UIColor = .white
-    ///When colorPickerTrigger.send() is called, UIColorPickViewController will be presented on the Rule30ViewController
-    var colorPickerTrigger = PassthroughSubject<ColorChange, Never>()
-    ///When startStopPyramid.send() is called, the pyramid will start/stop
-    var startStopPyramid = PassthroughSubject<Bool, Never>()
-    ///colorPickerColor is set, colorPickerTrigger will be...triggered, which will call the UIColorPickViewController
-    var colorPickerColor : ColorChange = .primary {
-        didSet {
-            colorPickerTrigger.send(colorPickerColor)
-        }
-    }
-   
+    var currentRule : Rule = .rule30
+    
     
     init() {
         reset()
@@ -78,15 +79,23 @@ class Rule30ViewModel {
         cell.colorIsActive = false
         cell.primaryColor = primaryColor
         cell.secondaryColor = secondaryColor
-    
+        
         
         if let neighborhoodCells = neighborhoodCells {
-            //if the top center or top right cells are ACTIVE, and the top left is INACTIVE, activate the current cell
-            
-            //if the top center or top right cells are INACTIVE, and the top left is ACTIVE, activate the current cell
-            if neighborhoodCells.topLeftCell.colorIsActive != (neighborhoodCells.topCell.colorIsActive || neighborhoodCells.topRightCell.colorIsActive) {
-                cell.colorIsActive = true
+            if currentRule == .rule30 {
+                if neighborhoodCells.topLeftCell.colorIsActive != (neighborhoodCells.topCell.colorIsActive || neighborhoodCells.topRightCell.colorIsActive) {
+                    cell.colorIsActive = true
+                }
+            }else {
+                if (neighborhoodCells.topLeftCell.colorIsActive && !neighborhoodCells.topCell.colorIsActive && !neighborhoodCells.topRightCell.colorIsActive) ||
+                    (neighborhoodCells.topRightCell.colorIsActive && !neighborhoodCells.topCell.colorIsActive && !neighborhoodCells.topLeftCell.colorIsActive) ||
+                    (!neighborhoodCells.topLeftCell.colorIsActive && neighborhoodCells.topCell.colorIsActive && neighborhoodCells.topRightCell.colorIsActive) ||
+                    (!neighborhoodCells.topRightCell.colorIsActive && neighborhoodCells.topCell.colorIsActive && neighborhoodCells.topLeftCell.colorIsActive){
+                    cell.colorIsActive = true
+                    
+                }
             }
+            
         }  else if isFirstCell(indexPath: indexPath) {
             cell.colorIsActive = true
         }
@@ -94,12 +103,8 @@ class Rule30ViewModel {
     }
     
     
-    ///gets the indexPath for the cell on the top-Center of the current indexPath cell. use like this
+    ///Gets the indexPath for the cell on the top-Center of the current indexPath cell. use like this
     ///
-    /**
-            let topCellIndexPath = viewModel.topCellIndexPath(indexPath: indexPath)
-            
-    */
     /// - Parameters:
     ///     - cell: The the current indexPaths Rule30CollectionViewCell.
     func topCellIndexPath(indexPath: IndexPath) -> IndexPath {
@@ -107,25 +112,20 @@ class Rule30ViewModel {
     }
     ///Gets the indexPath for the cell on the top-Left of the current indexPath cell. use like this
     ///
-    /**
-            let topLeftCellIndexPath = viewModel.topLeftCellIndexPath(indexPath: indexPath)
-            
-    */
     /// - Parameters:
     ///     - indexPath: The current indexPath Rule30CollectionViewCell.
     func topLeftCellIndexPath(indexPath: IndexPath) -> IndexPath {
         return IndexPath(item: topCellIndexPath(indexPath: indexPath).item - 1, section: topCellIndexPath(indexPath: indexPath).section)
     }
-    ///gets the indexPath for the cell on the top-Right of the current indexPath cell. use like this
-    ///
-    /**
-            let topRightCellIndexPath = viewModel.topRightCellIndexPath(indexPath: indexPath)
-            
-    */
+    ///Gets the indexPath for the cell on the top-Right of the current indexPath cell. use like this
     /// - Parameters:
-    ///     - cell: The the current indexPaths Rule30CollectionViewCell.
+    ///     - indexPath: The current indexPath Rule30CollectionViewCell.
     func topRightCellIndexPath(indexPath: IndexPath) -> IndexPath {
         return IndexPath(item: topCellIndexPath(indexPath: indexPath).item + 1, section: topCellIndexPath(indexPath: indexPath).section)
+    }
+    enum Rule {
+        case rule30
+        case rule90
     }
     
     enum ColorChange {
@@ -149,4 +149,3 @@ struct RVMNeighborhoodCells {
         self.topRightCell = topRightCell
     }
 }
-

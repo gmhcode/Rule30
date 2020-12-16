@@ -12,6 +12,7 @@ class ControlsViewController: UIViewController {
     
     var viewModel : Rule30ViewModel!
     @IBOutlet weak var startStopButton: UIButton!
+    @IBOutlet weak var segmentControl: UISegmentedControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +30,15 @@ class ControlsViewController: UIViewController {
         //resets the pyramid on the Rule30ViewController
         viewModel.reset()
     }
-    
+    @IBAction func segmentChanged(_ sender: Any) {
+        //sets the new rule
+        switch segmentControl.selectedSegmentIndex {
+        case 0:
+            viewModel.currentRule = .rule30
+        default:
+            viewModel.currentRule = .rule90
+        }
+    }
     @IBAction func stopStartTapped(_ sender: Any) {
         
         if startStopButton.titleLabel?.text == "Stop"{

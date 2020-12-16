@@ -156,11 +156,23 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="aSK-Ny-y1w">
+                                <rect key="frame" x="20" y="263" width="374" height="32"/>
+                                <segments>
+                                    <segment title="Rule 30"/>
+                                    <segment title="Rule 90"/>
+                                </segments>
+                                <connections>
+                                    <action selector="segmentChanged:" destination="lVX-p7-Ipb" eventType="valueChanged" id="Yt9-Xo-Qrp"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="yBf-40-cLo"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="aSK-Ny-y1w" firstAttribute="centerX" secondItem="yBf-40-cLo" secondAttribute="centerX" id="0HG-Tf-Osk"/>
                             <constraint firstItem="0aR-se-h9R" firstAttribute="centerX" secondItem="uPS-Ky-B1y" secondAttribute="centerX" id="4py-kR-kGk"/>
+                            <constraint firstItem="aSK-Ny-y1w" firstAttribute="top" secondItem="0aR-se-h9R" secondAttribute="bottom" constant="7.5" id="65R-XP-V1P"/>
                             <constraint firstItem="XWK-DQ-ymn" firstAttribute="centerX" secondItem="yBf-40-cLo" secondAttribute="centerX" id="CHD-Rz-sGh"/>
                             <constraint firstItem="uPS-Ky-B1y" firstAttribute="centerX" secondItem="zsJ-e9-xv1" secondAttribute="centerX" id="GWi-sj-nEu"/>
                             <constraint firstItem="uPS-Ky-B1y" firstAttribute="width" secondItem="zsJ-e9-xv1" secondAttribute="width" multiplier="0.903382" id="KE0-mq-GhD"/>
@@ -171,10 +183,12 @@
                             <constraint firstItem="XWK-DQ-ymn" firstAttribute="width" secondItem="zsJ-e9-xv1" secondAttribute="width" multiplier="0.434783" id="W6A-cd-fTH"/>
                             <constraint firstItem="uPS-Ky-B1y" firstAttribute="top" secondItem="XWK-DQ-ymn" secondAttribute="bottom" constant="30" id="bx7-HH-XLk"/>
                             <constraint firstItem="0aR-se-h9R" firstAttribute="width" secondItem="uPS-Ky-B1y" secondAttribute="width" id="eoZ-qi-wtr"/>
+                            <constraint firstItem="aSK-Ny-y1w" firstAttribute="width" secondItem="zsJ-e9-xv1" secondAttribute="width" multiplier="0.903382" id="sgT-4c-aDv"/>
                             <constraint firstItem="uPS-Ky-B1y" firstAttribute="height" secondItem="zsJ-e9-xv1" secondAttribute="height" multiplier="0.07" id="vz0-g6-aCe"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="segmentControl" destination="aSK-Ny-y1w" id="9cb-lU-Vav"/>
                         <outlet property="startStopButton" destination="IkU-Vj-nzX" id="lpS-Qn-cQ5"/>
                     </connections>
                 </viewController>

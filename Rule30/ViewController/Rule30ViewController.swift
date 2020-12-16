@@ -37,11 +37,13 @@ class Rule30ViewController: UIViewController {
         viewModel = Rule30ViewModel()
         colorPicker.delegate = self
         
+        // MARK: - Color Picker
         viewModel.colorPickerTrigger.sink {[weak self] (color) in
             guard let strongSelf = self else {return}
             strongSelf.present(strongSelf.colorPicker, animated: true, completion: nil)
         }.store(in: &cancellable)
         
+        // MARK: - Start Stop Pyramid
         viewModel.startStopPyramid.sink {[weak self] (_) in
             if self?.timer.isValid == true {
                 self?.timer.invalidate()
@@ -50,6 +52,7 @@ class Rule30ViewController: UIViewController {
             }
         }.store(in: &cancellable)
         
+        // MARK: - Reload Pyramid
         viewModel.$reloadData.sink {[weak self] (received) in
             self?.collectionView.reloadData()
         }.store(in: &cancellable)
